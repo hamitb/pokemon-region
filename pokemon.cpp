@@ -14,7 +14,7 @@ Pokemon::Pokemon(const Pokemon &other) {
     m_min = other.m_min;
     m_type = other.m_type;
 }
-
+test
 Pokemon::~Pokemon() {
 
 }
