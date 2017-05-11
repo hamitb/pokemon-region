@@ -5,10 +5,14 @@
 
 Pokemon::Pokemon(const string &n, const string &t, int m) {
     m_min = m;
+    m_name = n;
+    m_type = t;
 }
 
 Pokemon::Pokemon(const Pokemon &other) {
+    m_name = other.m_name;
     m_min = other.m_min;
+    m_type = other.m_type;
 }
 
 Pokemon::~Pokemon() {
@@ -23,12 +27,6 @@ bool Pokemon::operator>>(const Pokemon &) {
     return false;
 }
 
-Pokemon operator&(Pokemon &, Pokemon &) {
-    return Pokemon(__1::basic_string<char, char_traits<char>, allocator<char>>(),
-                   __1::basic_string<char, char_traits<char>, allocator<char>>(), 0);
-}
-
 Pokemon &Pokemon::operator=(const Pokemon &) {
-
     return <#initializer#>;
 }
