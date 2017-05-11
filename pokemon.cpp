@@ -10,10 +10,10 @@ Pokemon::Pokemon(const string &n, const string &t, int m) {
     m_exp = 0;
 }
 
-Pokemon::Pokemon(const Pokemon &other) {
-    m_name = other.m_name;
-    m_min = other.m_min;
-    m_type = other.m_type;
+Pokemon::Pokemon(const Pokemon &otherPokemon) {
+    m_name = otherPokemon.m_name;
+    m_min = otherPokemon.m_min;
+    m_type = otherPokemon.m_type;
 }
 
 Pokemon::~Pokemon() {
@@ -32,9 +32,9 @@ bool Pokemon::operator>>(const Pokemon &nextVersion) {
     bool canEvolve = (m_exp >= nextVersion.m_min) ;
 
     if (canEvolve) {
-        m_name = nextVersion.m_name ;
-        m_type = nextVersion.m_type ;
-        m_min  = nextVersion.m_min ;
+        m_name = nextVersion.m_name;
+        m_type = nextVersion.m_type;
+        m_min  = nextVersion.m_min;
 
         return true;
     }
@@ -42,8 +42,16 @@ bool Pokemon::operator>>(const Pokemon &nextVersion) {
     return false;
 }
 
-Pokemon &Pokemon::operator=(const Pokemon &) {
-    return <#initializer#>;
+Pokemon &Pokemon::operator=(const Pokemon &otherPokemon) {
+    if(this == &otherPokemon)
+        return *this;
+
+    m_name = otherPokemon.m_name;
+    m_type = otherPokemon.m_type;
+    m_min = otherPokemon.m_min;
+    m_exp = otherPokemon.m_exp;
+
+    return *this;
 }
 
 
