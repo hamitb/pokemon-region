@@ -29,17 +29,15 @@ bool Pokemon::operator>>(const Pokemon &nextVersion) {
         return false;
     }
 
-    bool canEvolve = (m_exp >= nextVersion.m_min) ;
+    bool canEvolve = (m_exp >= m_min) ;
 
     if (canEvolve) {
         m_name = nextVersion.m_name;
         m_type = nextVersion.m_type;
         m_min  = nextVersion.m_min;
-
-        return true;
     }
 
-    return false;
+    return canEvolve;
 }
 
 Pokemon &Pokemon::operator=(const Pokemon &otherPokemon) {

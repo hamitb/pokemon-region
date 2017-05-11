@@ -7,7 +7,7 @@
 
 using namespace std;
 
-void generatePokemons(Region*);
+//void generatePokemons(Region*);
 
 //g++ -ansi -pedantic pokemon.cpp region.cpp trainer.cpp main.cpp -o hw3
 
@@ -19,22 +19,23 @@ int main(int argc, char* argv[]) {
 
 	cout << pokemon1.getName() << "\n";
 	cout << pokemon2.getName() << "\n";
-	cout << (pokemon1&pokemon2).getName() << "\n";	// Pikachu & Rattata => Rattata wins
-	cout << (pokemon2&pokemon1).getName() << "\n";	// Rattata & Pikachu => Rattata wins
+	//cout << (pokemon1&pokemon2).getName() << "\n";	// Pikachu & Rattata => Rattata wins
+    //cout << (pokemon2&pokemon1).getName() << "\n";	// Rattata & Pikachu => Rattata wins
 
 	Pokemon pokemon3(pokemon1);			// Copy Pikachu
 	cout << pokemon3.getName() << "\n";
-	cout << (pokemon3&pokemon2).getName() << "\n";	// Copied Pikachu & Rattata => Rattata wins
+    //cout << (pokemon3&pokemon2).getName() << "\n";	// Copied Pikachu & Rattata => Rattata wins
 
 	Pokemon pokemon4("Raticate", "grass", -1);
 	cout << (pokemon2 >> pokemon4) << "\n";		// Try to evolve Rattata into Raticate => not possible
 
-	cout << (pokemon2&pokemon3).getName() << "\n";	// Rattata & Copied Pikachu => Rattata wins
+    //cout << (pokemon2&pokemon3).getName() << "\n";	// Rattata & Copied Pikachu => Rattata wins
 
 	cout << (pokemon2 >> pokemon4) << "\n";		// Try to evolve Rattata into Raticate => evolved
 	cout << pokemon2.getName() << "\n";		// Check Ratata has evolved into Raticate or not => It is Raticate
 	
-	/*************** Region Class Tests ***************/
+	/*
+	//Region Class Tests
 	int corner1[3] = {0, 0, 0};
 	int corner2[3] = {7, 3, 3};
 	Region world(corner1, corner2);
@@ -64,7 +65,6 @@ int main(int argc, char* argv[]) {
 	cout << world.getPokemonCount(corner1, corner2) << "\n";	// 29
 
 	Region mars(world);
-    auto k= mars(0,2,3);
 	int cornerX[3] = {4, 0, 2};
 	int cornerY[3] = {7, 1, 3};
 	mars = mars.crop(cornerX, cornerY);
@@ -78,7 +78,7 @@ int main(int argc, char* argv[]) {
 	mars.patch(jupiter);
 	cout << mars.getPokemonCount(cornerW, cornerZ) << "\n";		 // 2
 
-	/*************** Trainer Class Tests ***************/
+	//Trainer Class Tests
 	ostream& output = cout;
 
 	world.placePokemon(Pokemon("Lapras", "water", 11), 2, 1, 3);
@@ -116,11 +116,13 @@ int main(int argc, char* argv[]) {
 
 	cout << world.getPokemonCount(corner1, corner2) << "\n";	// 17
 
+	*/
 	return 0;
 }
 
+/*
 void generatePokemons(Region* region) {
-	/************* Electric Pokemons *************/
+	//Electric Pokemons
 	// Pokemon-1
 	region->placePokemon(Pokemon("Pikachu", "electric", 12), 7, 2, 1);
 	// Pokemon-2
@@ -130,7 +132,7 @@ void generatePokemons(Region* region) {
 	// Pokemon-4
 	region->placePokemon(Pokemon("Electrode", "electric", -1), 5, 2, 3);
 
-	/*************** Grass Pokemons ***************/
+	//Grass Pokemons
 	// Pokemon-5
 	region->placePokemon(Pokemon("Bulbasaur", "grass", 10), 2, 3, 3);
 	// Pokemon-6
@@ -144,7 +146,7 @@ void generatePokemons(Region* region) {
 	// Pokemon-10
 	region->placePokemon(Pokemon("Vileplume", "grass", -1), 3, 3, 3);
 
-	/*************** Fire Pokemons ***************/
+	//Fire Pokemons
 	// Pokemon-11
 	region->placePokemon(Pokemon("Charmander", "fire", 5), 1, 2, 2);
 	// Pokemon-12
@@ -160,7 +162,7 @@ void generatePokemons(Region* region) {
 	// Pokemon-17
 	region->placePokemon(Pokemon("Rapidash", "fire", -1), 3, 2, 1);
 
-	/*************** Water Pokemons ***************/
+	//Water Pokemons
 	// Pokemon-18
 	region->placePokemon(Pokemon("Squirtle", "water", 12), 6, 3, 0);
 	// Pokemon-19
@@ -176,7 +178,7 @@ void generatePokemons(Region* region) {
 	// Pokemon-24
 	region->placePokemon(Pokemon("Starmie", "water", -1), 5, 0, 3);
 
-	/************* Flying Pokemons *************/
+	//Flying Pokemons
 	// Pokemon-25
 	region->placePokemon(Pokemon("Pidgey", "flying", 3), 6, 1, 2);
 	// Pokemon-26
@@ -194,5 +196,5 @@ void generatePokemons(Region* region) {
 	// Pokemon-32
 	region->placePokemon(Pokemon("Golbat", "flying", -1), 0, 3, 0);
 }
-
+*/
 
