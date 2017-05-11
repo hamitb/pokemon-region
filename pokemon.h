@@ -9,7 +9,9 @@ class Pokemon {
 	private:
 		std::string m_name;
 		std::string m_type;
+		int m_exp;
 		int m_min;
+
 		// Add private members, methods and constructors here as you need
 	public:
 		// Do NOT make any modifications below
