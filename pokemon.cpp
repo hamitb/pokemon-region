@@ -14,13 +14,13 @@ Pokemon::Pokemon(const Pokemon &other) {
     m_min = other.m_min;
     m_type = other.m_type;
 }
-deneme
-Pokemon::~Pokemon() {
 
+Pokemon::~Pokemon() {
+    // Nothing to destruct
 }
 
 const string &Pokemon::getName() const {
-    return "";
+    return m_name;
 }
 
 bool Pokemon::operator>>(const Pokemon &) {
