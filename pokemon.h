@@ -12,6 +12,7 @@ class Pokemon {
 		int m_exp;
 		int m_min;
 
+        void gainExp();
 		// Add private members, methods and constructors here as you need
 	public:
 		// Do NOT make any modifications below

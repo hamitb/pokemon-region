@@ -40,6 +40,63 @@ bool Pokemon::operator>>(const Pokemon &nextVersion) {
     return canEvolve;
 }
 
+Pokemon operator&(Pokemon& firstPokemon, Pokemon& secondPokemon) {
+    firstPokemon.gainExp();
+    secondPokemon.gainExp();
+
+    if(firstPokemon.m_type == "fire") {
+        if(secondPokemon.m_type == "water"){
+            return secondPokemon;
+        }else if(secondPokemon.m_type == "grass"){
+            return firstPokemon;
+        }else if(secondPokemon.m_type == "electric"){
+            return firstPokemon;
+        }else if(secondPokemon.m_type == "flying"){
+            return secondPokemon;
+        }
+    }else if(firstPokemon.m_type == "water"){
+        if(secondPokemon.m_type == "fire"){
+            return firstPokemon;
+        }else if(secondPokemon.m_type == "grass"){
+            return secondPokemon;
+        }else if(secondPokemon.m_type == "electric"){
+            return secondPokemon;
+        }else if(secondPokemon.m_type == "flying"){
+            return firstPokemon;
+        }
+    }else if(firstPokemon.m_type == "grass"){
+        if(secondPokemon.m_type == "fire"){
+            return secondPokemon;
+        }else if(secondPokemon.m_type == "water"){
+            return firstPokemon;
+        }else if(secondPokemon.m_type == "electric"){
+            return firstPokemon;
+        }else if(secondPokemon.m_type == "flying"){
+            return secondPokemon;
+        }
+    }else if(firstPokemon.m_type == "electric"){
+        if(secondPokemon.m_type == "fire"){
+            return secondPokemon;
+        }else if(secondPokemon.m_type == "water"){
+            return firstPokemon;
+        }else if(secondPokemon.m_type == "grass"){
+            return secondPokemon;
+        }else if(secondPokemon.m_type == "flying"){
+            return firstPokemon;
+        }
+    }else if(firstPokemon.m_type == "flying"){
+        if(secondPokemon.m_type == "fire"){
+            return firstPokemon;
+        }else if(secondPokemon.m_type == "water"){
+            return secondPokemon;
+        }else if(secondPokemon.m_type == "grass"){
+            return firstPokemon;
+        }else if(secondPokemon.m_type == "electric"){
+            return secondPokemon;
+        }
+    }
+}
+
 Pokemon &Pokemon::operator=(const Pokemon &otherPokemon) {
     if(this == &otherPokemon)
         return *this;
@@ -50,6 +107,10 @@ Pokemon &Pokemon::operator=(const Pokemon &otherPokemon) {
     m_exp = otherPokemon.m_exp;
 
     return *this;
+}
+
+void Pokemon::gainExp() {
+    m_exp++;
 }
 
 

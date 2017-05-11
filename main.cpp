@@ -19,17 +19,17 @@ int main(int argc, char* argv[]) {
 
 	cout << pokemon1.getName() << "\n";
 	cout << pokemon2.getName() << "\n";
-	//cout << (pokemon1&pokemon2).getName() << "\n";	// Pikachu & Rattata => Rattata wins
-    //cout << (pokemon2&pokemon1).getName() << "\n";	// Rattata & Pikachu => Rattata wins
+	cout << (pokemon1&pokemon2).getName() << "\n";	// Pikachu & Rattata => Rattata wins
+    cout << (pokemon2&pokemon1).getName() << "\n";	// Rattata & Pikachu => Rattata wins
 
 	Pokemon pokemon3(pokemon1);			// Copy Pikachu
 	cout << pokemon3.getName() << "\n";
-    //cout << (pokemon3&pokemon2).getName() << "\n";	// Copied Pikachu & Rattata => Rattata wins
+    cout << (pokemon3&pokemon2).getName() << "\n";	// Copied Pikachu & Rattata => Rattata wins
 
 	Pokemon pokemon4("Raticate", "grass", -1);
 	cout << (pokemon2 >> pokemon4) << "\n";		// Try to evolve Rattata into Raticate => not possible
 
-    //cout << (pokemon2&pokemon3).getName() << "\n";	// Rattata & Copied Pikachu => Rattata wins
+    cout << (pokemon2&pokemon3).getName() << "\n";	// Rattata & Copied Pikachu => Rattata wins
 
 	cout << (pokemon2 >> pokemon4) << "\n";		// Try to evolve Rattata into Raticate => evolved
 	cout << pokemon2.getName() << "\n";		// Check Ratata has evolved into Raticate or not => It is Raticate
