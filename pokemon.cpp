@@ -14,6 +14,7 @@ Pokemon::Pokemon(const Pokemon &otherPokemon) {
     m_name = otherPokemon.m_name;
     m_min = otherPokemon.m_min;
     m_type = otherPokemon.m_type;
+    m_exp = otherPokemon.m_exp;
 }
 
 Pokemon::~Pokemon() {

@@ -10,6 +10,12 @@ using namespace std;
 class Region {
 	private:
 		// Add private members, methods and constructors here as you need
+		int m_minBorder[3];
+		int m_maxBorder[3];
+
+		Region *parent;
+		Region *rightPart;
+		Region *leftPart;
 	public:
 		// Do NOT make any modifications below
 		Region(const int[3], const int[3]);
