@@ -11,7 +11,7 @@ Region::Region(const int minBorder[3] , const int maxBorder[3]) {
     }
 
     m_divDimension = rootDivDim();
-    m_parent = this;
+    m_parent = NULL;
     m_leftPart = NULL;
     m_rightPart = NULL;
 
@@ -24,7 +24,7 @@ Region::Region(const int minBorder[3] , const int maxBorder[3]) {
         secondStart = mid + passNext;
         leftMax[0] = mid;
         leftMax[1] = maxBorder[1];
-        leftMax[3] = maxBorder[2];
+        leftMax[2] = maxBorder[2];
 
         rightMin[0] = secondStart;
         rightMin[1] = minBorder[1];
@@ -36,7 +36,7 @@ Region::Region(const int minBorder[3] , const int maxBorder[3]) {
         secondStart = mid + passNext;
         leftMax[0] = maxBorder[0];
         leftMax[1] = mid;
-        leftMax[3] = maxBorder[2];
+        leftMax[2] = maxBorder[2];
 
         rightMin[0] = minBorder[0];
         rightMin[1] = secondStart;
@@ -48,7 +48,7 @@ Region::Region(const int minBorder[3] , const int maxBorder[3]) {
         secondStart = mid + passNext;
         leftMax[0] = maxBorder[0];
         leftMax[1] = maxBorder[1];
-        leftMax[3] = mid;
+        leftMax[2] = mid;
 
         rightMin[0] = minBorder[0];
         rightMin[1] = minBorder[1];
@@ -76,7 +76,7 @@ Region::Region(const int minBorder[3], const int maxBorder[3], char parentDivDim
             secondStart = mid + passNext;
             leftMax[0] = mid;
             leftMax[1] = maxBorder[1];
-            leftMax[3] = maxBorder[2];
+            leftMax[2] = maxBorder[2];
 
             rightMin[0] = secondStart;
             rightMin[1] = minBorder[1];
@@ -90,7 +90,7 @@ Region::Region(const int minBorder[3], const int maxBorder[3], char parentDivDim
             secondStart = mid + passNext;
             leftMax[0] = maxBorder[0];
             leftMax[1] = mid;
-            leftMax[3] = maxBorder[2];
+            leftMax[2] = maxBorder[2];
 
             rightMin[0] = minBorder[0];
             rightMin[1] = secondStart;
@@ -104,7 +104,7 @@ Region::Region(const int minBorder[3], const int maxBorder[3], char parentDivDim
             secondStart = mid + passNext;
             leftMax[0] = maxBorder[0];
             leftMax[1] = maxBorder[1];
-            leftMax[3] = mid;
+            leftMax[2] = mid;
 
             rightMin[0] = minBorder[0];
             rightMin[1] = minBorder[1];
@@ -153,7 +153,7 @@ char Region::nextDivDim(char currentDivDim, const int minBorder[3], const int ma
     return 'y';
 }
 
-bool Region::isCell() {
+bool Region::isCell() const{
     bool result = true;
 
     for (int i = 0; i < 3; i++) {
@@ -226,7 +226,7 @@ void Region::placePokemon(const Pokemon &givenPokemon, int xPos, int yPos, int z
      }
 }
 
-char Region::placePosition(int xPos, int yPos, int zPos) {
+char Region::placePosition(int xPos, int yPos, int zPos) const {
     char result = 'l';
 
     if(m_divDimension == 'x'){
@@ -270,13 +270,80 @@ char Region::placePosition(int xPos, int yPos, int zPos) {
     return result;
 }
 
-Pokemon &Region::operator()(int, int, int) {
-    return <#initializer#>;
+void Region::goUpAndClean() {
+    if(m_parent && m_getPokemonCount() == 0){
+        if(m_parent->m_leftPart == this)
+            m_parent->m_leftPart = NULL;
+        else if(m_parent->m_rightPart == this)
+            m_parent->m_rightPart = NULL;
+    }
 }
 
-int Region::getPokemonCount(const int *, const int *) const {
-    return 0;
+Pokemon &Region::operator()(int xPos, int yPos, int zPos) {
+    if (isCell()) {
+        //TODO go up get pokemon count and delete node if count is 1
+
+        if(!pokemon){
+            //TODO return exception if no pokemon found
+        }
+
+        Pokemon result = *pokemon;
+
+        pokemon = NULL;
+
+
+        goUpAndClean();
+
+
+        return result;
+    }
+
+    if (placePosition(xPos, yPos, zPos) == 'l') {
+        return m_leftPart->operator()(xPos, yPos, zPos);
+    } else {
+        return m_rightPart->operator()(xPos, yPos, zPos);
+    }
 }
+
+int Region::getPokemonCount(const int givenMin[3], const int givenMax[3]) const {
+
+    Region const *founded = findRegion(givenMin, givenMax);
+
+    founded->m_getPokemonCount();
+
+}
+
+int Region::m_getPokemonCount() const {
+    if(isCell() && pokemon)
+        return 1;
+    else if(isCell())
+        return 0;
+    else if(m_leftPart && m_rightPart)
+        return m_leftPart->m_getPokemonCount() + m_rightPart->m_getPokemonCount();
+    else if(m_leftPart)
+        return m_leftPart->m_getPokemonCount();
+    else if(m_rightPart)
+        return m_rightPart->m_getPokemonCount();
+}
+
+ Region const * Region::findRegion(const int givenMin [3], const int givenMax [3]) const {
+    bool result = true;
+    for (int i = 0; i < 3; i++) {
+        result = result && (m_minBorder[i] == givenMin[i]) && (m_maxBorder[i] == givenMax[i]);
+    }
+
+    if(result)
+        return this;
+
+    if(placePosition(givenMin[0], givenMin[1], givenMin[2]) == 'l') {
+        return m_leftPart->findRegion(givenMin, givenMax);
+    } else {
+        return m_rightPart->findRegion(givenMin, givenMax);
+    }
+}
+
+
+/*
 
 Region Region::crop(const int *, const int *) const {
     return Region(NULL, NULL);
@@ -294,3 +361,4 @@ Region &Region::operator=(const Region &) {
 long Region::isCell(const int *, const int *) {
     return 0;
 }
+*/

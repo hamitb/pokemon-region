@@ -25,11 +25,14 @@ class Region {
 		Pokemon *pokemon;
 
 		Region(const int[3], const int[3], char divDim, Region*);
-		bool isCell();
+		bool isCell() const;
 		void setBorders(const int[3], const int[3]);
 		char nextDivDim(char , const int[3], const int[3]);
-		char placePosition(int, int, int);
+		char placePosition(int, int, int) const;
 		char rootDivDim();
+		int m_getPokemonCount() const;
+		void goUpAndClean();
+		Region const* findRegion(const int[3], const int[3]) const;
 	public:
 		// Do NOT make any modifications below
 		Region(const int[3], const int[3]);

@@ -7,7 +7,7 @@
 
 using namespace std;
 
-//void generatePokemons(Region*);
+void generatePokemons(Region*);
 
 //g++ -ansi -pedantic pokemon.cpp region.cpp trainer.cpp main.cpp -o hw3
 
@@ -40,8 +40,9 @@ int main(int argc, char* argv[]) {
 	int corner2[3] = {7, 3, 3};
 	Region world(corner1, corner2);
 
-/*
+
 	generatePokemons(&world);
+	/*
 	cout << world.getPokemonCount(corner1, corner2) << "\n";	// 32
 
 	Pokemon& ivysaur = world(6, 0, 2);
@@ -121,7 +122,6 @@ int main(int argc, char* argv[]) {
 	return 0;
 }
 
-/*
 void generatePokemons(Region* region) {
 	//Electric Pokemons
 	// Pokemon-1
@@ -197,5 +197,4 @@ void generatePokemons(Region* region) {
 	// Pokemon-32
 	region->placePokemon(Pokemon("Golbat", "flying", -1), 0, 3, 0);
 }
-*/
 
