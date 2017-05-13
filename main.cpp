@@ -42,7 +42,6 @@ int main(int argc, char* argv[]) {
 
 
 	generatePokemons(&world);
-	/*
 	cout << world.getPokemonCount(corner1, corner2) << "\n";	// 32
 
 	Pokemon& ivysaur = world(6, 0, 2);
@@ -63,6 +62,7 @@ int main(int argc, char* argv[]) {
 	catch (exception& e) {
 		cout << e.what() << "\n";		// Exception: "There does not exist any pokemon in the given coordinates!"
 	}
+	/*
 
 	cout << world.getPokemonCount(corner1, corner2) << "\n";	// 29
 

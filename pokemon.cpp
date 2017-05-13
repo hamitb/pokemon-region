@@ -18,7 +18,7 @@ Pokemon::Pokemon(const Pokemon &otherPokemon) {
 }
 
 Pokemon::~Pokemon() {
-    // Nothing to destruct
+
 }
 
 const string &Pokemon::getName() const {

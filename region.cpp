@@ -277,31 +277,36 @@ void Region::goUpAndClean() {
         else if(m_parent->m_rightPart == this)
             m_parent->m_rightPart = NULL;
     }
+
+    if(m_parent)
+        m_parent->goUpAndClean();
 }
 
 Pokemon &Region::operator()(int xPos, int yPos, int zPos) {
     if (isCell()) {
-        //TODO go up get pokemon count and delete node if count is 1
-
         if(!pokemon){
-            //TODO return exception if no pokemon found
+            throw pokemonException();
         }
-
-        Pokemon result = *pokemon;
+        Pokemon* result = pokemon;
 
         pokemon = NULL;
-
 
         goUpAndClean();
 
 
-        return result;
+        return *result;
     }
 
     if (placePosition(xPos, yPos, zPos) == 'l') {
-        return m_leftPart->operator()(xPos, yPos, zPos);
+        if(m_leftPart)
+            return m_leftPart->operator()(xPos, yPos, zPos);
+        else
+            throw pokemonException();
     } else {
-        return m_rightPart->operator()(xPos, yPos, zPos);
+        if(m_rightPart)
+            return m_rightPart->operator()(xPos, yPos, zPos);
+        else
+            throw pokemonException();
     }
 }
 
@@ -309,13 +314,13 @@ int Region::getPokemonCount(const int givenMin[3], const int givenMax[3]) const 
 
     Region const *founded = findRegion(givenMin, givenMax);
 
-    founded->m_getPokemonCount();
-
+    return founded->m_getPokemonCount();
 }
 
 int Region::m_getPokemonCount() const {
-    if(isCell() && pokemon)
+    if(isCell() && pokemon){
         return 1;
+    }
     else if(isCell())
         return 0;
     else if(m_leftPart && m_rightPart)
