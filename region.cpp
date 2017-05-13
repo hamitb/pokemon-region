@@ -34,7 +34,7 @@ Region::Region(const int minBorder[3], const int maxBorder[3], char parentDivDim
             int mid = total / 2;
             int secondStart = mid + passNext;
             const int leftMax[3] = {mid, maxBorder[1], maxBorder[2]};
-            const int rightMin[3] = {secondStart, maxBorder[1], maxBorder[2]};
+            const int rightMin[3] = {secondStart, minBorder[1], minBorder[2]};
             m_leftPart = new Region(minBorder,leftMax, m_divDimension, this);
             m_rightPart = new Region(rightMin, maxBorder, m_divDimension, this);
         }else if(m_divDimension == 'y') {
@@ -128,12 +128,13 @@ Region::~Region() {
 
 }
 
-/*
-Region::Region(const Region &) {
+Region::Region(const Region &other) {
+    setBorders(other.m_minBorder, other.m_maxBorder);
 
+    m_parent = other.m_parent;
+    m_rightPart = other.m_rightPart;
+    m_leftPart = other.m_leftPart;
 }
-
-
 
 
 void Region::placePokemon(const Pokemon &, int, int, int) {
@@ -164,4 +165,3 @@ Region &Region::operator=(const Region &) {
 long Region::isCell(const int *, const int *) {
     return 0;
 }
-*/

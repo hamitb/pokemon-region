@@ -18,6 +18,8 @@ class Region {
 		Region *m_rightPart;
 		Region *m_leftPart;
 
+		Pokemon *pokemon;
+
 		Region(const int[3], const int[3], char divDim, Region*);
 		bool isCell(const int[3], const int[3]);
 		void setBorders(const int[3], const int[3]);
