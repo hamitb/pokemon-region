@@ -12,6 +12,10 @@ class Region {
 		// Add private members, methods and constructors here as you need
 		int m_minBorder[3];
 		int m_maxBorder[3];
+		int leftMax[3];
+		int rightMin[3];
+		int mid;
+		int secondStart;
 		char m_divDimension;
 
 		Region *m_parent;
@@ -21,9 +25,11 @@ class Region {
 		Pokemon *pokemon;
 
 		Region(const int[3], const int[3], char divDim, Region*);
-		bool isCell(const int[3], const int[3]);
+		bool isCell();
 		void setBorders(const int[3], const int[3]);
-		char nextDivDim(char currentDivDim, const int[3], const int[3]);
+		char nextDivDim(char , const int[3], const int[3]);
+		char placePosition(int, int, int);
+		char rootDivDim();
 	public:
 		// Do NOT make any modifications below
 		Region(const int[3], const int[3]);
