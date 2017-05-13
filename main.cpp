@@ -34,12 +34,13 @@ int main(int argc, char* argv[]) {
 	cout << (pokemon2 >> pokemon4) << "\n";		// Try to evolve Rattata into Raticate => evolved
 	cout << pokemon2.getName() << "\n";		// Check Ratata has evolved into Raticate or not => It is Raticate
 	
-	/*
+
 	//Region Class Tests
 	int corner1[3] = {0, 0, 0};
 	int corner2[3] = {7, 3, 3};
 	Region world(corner1, corner2);
 
+/*
 	generatePokemons(&world);
 	cout << world.getPokemonCount(corner1, corner2) << "\n";	// 32
 

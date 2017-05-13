@@ -12,10 +12,16 @@ class Region {
 		// Add private members, methods and constructors here as you need
 		int m_minBorder[3];
 		int m_maxBorder[3];
+		char m_divDimension;
 
-		Region *parent;
-		Region *rightPart;
-		Region *leftPart;
+		Region *m_parent;
+		Region *m_rightPart;
+		Region *m_leftPart;
+
+		Region(const int[3], const int[3], char divDim, Region*);
+		bool isCell(const int[3], const int[3]);
+		void setBorders(const int[3], const int[3]);
+		char nextDivDim(char currentDivDim, const int[3], const int[3]);
 	public:
 		// Do NOT make any modifications below
 		Region(const int[3], const int[3]);

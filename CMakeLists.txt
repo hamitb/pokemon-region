@@ -3,5 +3,5 @@ project(ClionProject)
 
 set(CMAKE_CXX_STANDARD 98)
 
-set(SOURCE_FILES main.cpp pokemon.cpp)
+set(SOURCE_FILES main.cpp pokemon.cpp region.cpp)
 add_executable(ClionProject ${SOURCE_FILES})
