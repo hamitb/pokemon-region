@@ -25,6 +25,8 @@ class Region {
 		Pokemon *pokemon;
 
 		Region(const int[3], const int[3], char divDim, Region*);
+        void copyHelper(const Region&);
+        void constructSub(const int[3], const int[3]);
 		bool isCell() const;
 		void setBorders(const int[3], const int[3]);
 		char nextDivDim(char , const int[3], const int[3]);
