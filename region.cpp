@@ -73,6 +73,7 @@ void Region::constructSub(const int minBorder[3], const int maxBorder[3]){
         rightMin[1] = minBorder[1];
         rightMin[2] = secondStart;
     }
+
 }
 
 char Region::rootDivDim() {
@@ -156,33 +157,13 @@ Region::~Region() {
 }
 
 Region::Region(const Region &other) {
-    setBorders(other.m_minBorder, other.m_maxBorder);
-
-    m_parent = other.m_parent;
-    pokemon = other.pokemon;
-    mid = other.mid;
-    secondStart = other.secondStart;
-    m_divDimension = other.m_divDimension;
-
-    for(int i = 0; i < 3; i++) {
-        leftMax[i] = other.leftMax[i];
-        rightMin[i] = other.rightMin[i];
-    }
-
-    if(other.m_rightPart)
-        m_rightPart = new Region(*other.m_rightPart);
-    else
-        m_rightPart = NULL;
-
-    if(other.m_leftPart)
-        m_leftPart = new Region(*other.m_leftPart);
-    else
-        m_leftPart = NULL;
+    copyHelper(other);
 }
 
 
 void Region::placePokemon(const Pokemon &givenPokemon, int xPos, int yPos, int zPos) {
     if (isCell()) {
+        givenPokemon.t_ref_cnt = givenPokemon.t_ref_cnt + 1;
         pokemon = new Pokemon(givenPokemon);
     } else {
         if(placePosition(xPos, yPos, zPos) == 'l'){
@@ -264,6 +245,8 @@ Pokemon &Region::operator()(int xPos, int yPos, int zPos) {
         if(!pokemon){
             throw pokemonException();
         }
+
+        pokemon->t_ref_cnt = pokemon->t_ref_cnt - 1;
         Pokemon* result = pokemon;
 
         pokemon = NULL;
@@ -289,6 +272,8 @@ Pokemon &Region::operator()(int xPos, int yPos, int zPos) {
 
 int Region::getPokemonCount(const int givenMin[3], const int givenMax[3]) const {
     bool result = true;
+
+
     for (int i = 0; i < 3; i++) {
         result = result && (m_minBorder[i] == givenMin[i]) && (m_maxBorder[i] == givenMax[i]);
     }
@@ -297,20 +282,30 @@ int Region::getPokemonCount(const int givenMin[3], const int givenMax[3]) const 
         return m_getPokemonCount();
     }
 
-    if(placePosition(givenMin[0], givenMin[1], givenMin[2]) == 'l') {
-        if(m_leftPart)
-            return m_leftPart->getPokemonCount(givenMin, givenMax);
-        else{
-            return 0;
-        }
+    char directPut = findPatchPos(givenMin, givenMax);
 
-    } else {
-        if(m_rightPart)
-            return m_rightPart->getPokemonCount(givenMin, givenMax);
-        else{
-            return 0;
+    if(directPut == 'l'){
+        return m_leftPart->getPokemonCount(givenMin, givenMax);
+    }
+    else if(directPut == 'r'){
+        return m_rightPart->getPokemonCount(givenMin, givenMax);
+    } else{
+        if(placePosition(givenMin[0], givenMin[1], givenMin[2]) == 'l') {
+            if(m_leftPart)
+                return m_leftPart->getPokemonCount(givenMin, givenMax);
+            else{
+                return 0;
+            }
+
+        } else {
+            if(m_rightPart)
+                return m_rightPart->getPokemonCount(givenMin, givenMax);
+            else{
+                return 0;
+            }
         }
     }
+
 }
 
 int Region::m_getPokemonCount() const {
@@ -432,7 +427,9 @@ void Region::patch(Region other) {
     }
 
     if(result){
+        Region* currentParent = m_parent;
         copyHelper(other);
+        m_parent = currentParent;
     }
 
     int otherMinX = other.m_minBorder[0];
@@ -443,10 +440,10 @@ void Region::patch(Region other) {
     char directPut = findPatchPos(other.m_minBorder, other.m_maxBorder);
 
     if(directPut == 'l'){
-        m_leftPart->copyHelper(other);
+        m_leftPart = new Region(other);
     }
     else if(directPut == 'r'){
-        m_rightPart->copyHelper(other);
+        m_rightPart = new Region(other);
     } else{
         if(pos == 'l') {
             if (!m_leftPart)
@@ -469,26 +466,40 @@ Region &Region::operator=(const Region &other) {
 }
 
 void Region::copyHelper(const Region &other) {
-    setBorders(other.m_minBorder, other.m_maxBorder);
-
-    m_parent = other.m_parent;
-    pokemon = other.pokemon;
-    mid = other.mid;
-    secondStart = other.secondStart;
-    m_divDimension = other.m_divDimension;
-
-    for(int i = 0; i < 3; i++) {
-        leftMax[i] = other.leftMax[i];
-        rightMin[i] = other.rightMin[i];
-    }
-
-    if(other.m_rightPart)
-        m_rightPart = new Region(*other.m_rightPart);
-    else
-        m_rightPart = NULL;
-
-    if(other.m_leftPart)
-        m_leftPart = new Region(*other.m_leftPart);
-    else
+    if(other.isCell()){
+        for(int i = 0; i < 3; i++) {
+            m_minBorder[i] = other.m_minBorder[i];
+            m_maxBorder[i] = other.m_maxBorder[i];
+        }
+        m_parent = other.m_parent;
+        m_divDimension = other.m_divDimension;
+        pokemon = other.pokemon;
         m_leftPart = NULL;
+        m_rightPart = NULL;
+    } else {
+        for(int i = 0; i < 3; i++) {
+            m_minBorder[i] = other.m_minBorder[i];
+            m_maxBorder[i] = other.m_maxBorder[i];
+            leftMax[i] = other.leftMax[i];
+            rightMin[i] = other.rightMin[i];
+        }
+
+        mid = other.mid;
+        secondStart = other.secondStart;
+        m_divDimension = other.m_divDimension;
+        pokemon = other.pokemon;
+        m_parent = other.m_parent;
+
+
+        if(other.m_leftPart){
+            m_leftPart = new Region(*other.m_leftPart);
+        }else
+            m_leftPart = NULL;
+
+        if(other.m_rightPart){
+            m_rightPart = new Region(*other.m_rightPart);
+        }else
+            m_rightPart = NULL;
+
+    }
 }

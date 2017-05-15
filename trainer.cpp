@@ -40,6 +40,7 @@ void Trainer::scanRegion(Region &region) {
 
                     try {
                         Pokemon* pokeFound = &(region(i, j, k));
+                        pokeFound->t_ref_cnt = pokeFound->t_ref_cnt + 1;
                         pokeVector.push_back(pokeFound);
                     }
                     catch (exception& e) {
