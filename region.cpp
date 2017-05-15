@@ -275,6 +275,29 @@ int Region::getPokemonCount(const int givenMin[3], const int givenMax[3]) const 
     return founded.m_getPokemonCount();
 }
 
+Region const* Region::findRegion(const int givenMin[3], const int givenMax[3]) const{
+    bool result = true;
+    for (int i = 0; i < 3; i++) {
+        result = result && (givenMin[i] == givenMin[i]) && (givenMin[i] == givenMax[i]);
+    }
+
+    if(result){
+        return this;
+    }
+
+    if(placePosition(givenMin[0], givenMin[1], givenMin[2]) == 'l') {
+        if(m_leftPart)
+            return m_leftPart->findRegion(givenMin, givenMax);
+        else
+            return NULL;
+    } else {
+        if(m_rightPart)
+            return m_rightPart->findRegion(givenMin, givenMax);
+        else
+            return NULL;
+    }
+}
+
 int Region::m_getPokemonCount() const {
     if(isCell() && pokemon){
         return 1;
@@ -301,9 +324,20 @@ Region Region::crop(const int givenMin [3], const int givenMax [3]) const {
         return *this;
 
     if(placePosition(givenMin[0], givenMin[1], givenMin[2]) == 'l') {
-        return m_leftPart->crop(givenMin, givenMax);
+        if(m_leftPart)
+            return m_leftPart->crop(givenMin, givenMax);
+        else{
+            Region *resultVol = new Region(m_minBorder, m_maxBorder);
+            return *resultVol;
+        }
+
     } else {
-        return m_rightPart->crop(givenMin, givenMax);
+        if(m_rightPart)
+            return m_rightPart->crop(givenMin, givenMax);
+        else{
+            Region *resultVol = new Region(m_minBorder, m_maxBorder);
+            return *resultVol;
+        }
     }
 }
 
@@ -355,9 +389,6 @@ void Region::copyHelper(const Region &other) {
         leftMax[i] = other.leftMax[i];
         rightMin[i] = other.rightMin[i];
     }
-
-    delete m_rightPart;
-    delete m_leftPart;
 
     if(other.m_rightPart)
         m_rightPart = new Region(*other.m_rightPart);

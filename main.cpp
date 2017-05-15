@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
 	catch (exception& e) {
 		cout << e.what() << "\n";		// Exception: "There does not exist any pokemon in the given coordinates!"
 	}
-	/*
+
 
 	cout << world.getPokemonCount(corner1, corner2) << "\n";	// 29
 
@@ -73,13 +73,17 @@ int main(int argc, char* argv[]) {
 	cout << mars.getPokemonCount(cornerX, cornerY) << "\n";		// 4
 	int cornerW[3] = {7, 0, 2};
 	int cornerZ[3] = {7, 1, 3};
+
 	Region jupiter(cornerW, cornerZ);
+
 	jupiter.placePokemon(Pokemon("Togepi", "unknown", -1), 7, 0, 3); // you can change the type if you wish
 	jupiter.placePokemon(Pokemon("Gastly", "unknown", -1), 7, 1, 2); // "unknown" type of pokemons will not be put into challenge
+
 	cout << mars.getPokemonCount(cornerW, cornerZ) << "\n";		 // 0
+/*
+
 	mars.patch(jupiter);
 	cout << mars.getPokemonCount(cornerW, cornerZ) << "\n";		 // 2
-
 	//Trainer Class Tests
 	ostream& output = cout;
 
