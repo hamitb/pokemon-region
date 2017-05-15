@@ -26,6 +26,7 @@ class Region {
 
 		Region(const int[3], const int[3], char divDim, Region*);
 		Region const* findRegion(const int [3], const int [3]) const;
+		char findPatchPos (const int [3], const int [3]) const;
 		void copyHelper(const Region&);
         void constructSub(const int[3], const int[3]);
 		bool isCell() const;

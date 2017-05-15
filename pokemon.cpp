@@ -8,6 +8,7 @@ Pokemon::Pokemon(const string &n, const string &t, int m) {
     m_name = n;
     m_type = t;
     m_exp = 0;
+    t_ref_cnt = 0;
 }
 
 Pokemon::Pokemon(const Pokemon &otherPokemon) {
@@ -15,6 +16,7 @@ Pokemon::Pokemon(const Pokemon &otherPokemon) {
     m_min = otherPokemon.m_min;
     m_type = otherPokemon.m_type;
     m_exp = otherPokemon.m_exp;
+    t_ref_cnt = otherPokemon.t_ref_cnt;
 }
 
 Pokemon::~Pokemon() {
@@ -106,6 +108,8 @@ Pokemon &Pokemon::operator=(const Pokemon &otherPokemon) {
     m_type = otherPokemon.m_type;
     m_min = otherPokemon.m_min;
     m_exp = otherPokemon.m_exp;
+
+    t_ref_cnt = otherPokemon.t_ref_cnt;
 
     return *this;
 }

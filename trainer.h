@@ -11,8 +11,14 @@ using namespace std;
 
 class Trainer {
 	private:
-	std::vector<const Pokemon*>pokemons;
-		// Add private members, methods and constructors here as you need
+        std::vector<const Pokemon*>pokeVector;
+        std::string m_name;
+        const Pokemon* m_firstPokemon;
+        int m_minView[3];
+        int m_maxView[3];
+
+        bool isBetween(int x, int y, int z);
+    // Add private members, methods and constructors here as you need
 	public:
 		// Do NOT make any modifications below
 		Trainer(const string&, const Pokemon&, const int[3], const int[3]);
@@ -20,7 +26,7 @@ class Trainer {
 		~Trainer();
 		void catchPokemon(const Pokemon& newPokemon) {
 			newPokemon.t_ref_cnt++;
-			pokemons.push_back(&newPokemon);
+            pokeVector.push_back(&newPokemon);
 		};
 		void scanRegion(Region&);
 		friend ostream& showPokemons(ostream&, const Trainer&);

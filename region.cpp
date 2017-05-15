@@ -48,8 +48,6 @@ void Region::constructSub(const int minBorder[3], const int maxBorder[3]){
         rightMin[0] = secondStart;
         rightMin[1] = minBorder[1];
         rightMin[2] = minBorder[2];
-        m_leftPart = new Region(minBorder,leftMax, m_divDimension, this);
-        m_rightPart = new Region(rightMin, maxBorder, m_divDimension, this);
     }else if(m_divDimension == 'y') {
         int total = minBorder[1] + maxBorder[1];
         int passNext = (total > 0) ? 1 : -1 ;
@@ -158,7 +156,28 @@ Region::~Region() {
 }
 
 Region::Region(const Region &other) {
-    copyHelper(other);
+    setBorders(other.m_minBorder, other.m_maxBorder);
+
+    m_parent = other.m_parent;
+    pokemon = other.pokemon;
+    mid = other.mid;
+    secondStart = other.secondStart;
+    m_divDimension = other.m_divDimension;
+
+    for(int i = 0; i < 3; i++) {
+        leftMax[i] = other.leftMax[i];
+        rightMin[i] = other.rightMin[i];
+    }
+
+    if(other.m_rightPart)
+        m_rightPart = new Region(*other.m_rightPart);
+    else
+        m_rightPart = NULL;
+
+    if(other.m_leftPart)
+        m_leftPart = new Region(*other.m_leftPart);
+    else
+        m_leftPart = NULL;
 }
 
 
@@ -269,32 +288,28 @@ Pokemon &Region::operator()(int xPos, int yPos, int zPos) {
 }
 
 int Region::getPokemonCount(const int givenMin[3], const int givenMax[3]) const {
-
-    Region founded = crop(givenMin, givenMax);
-
-    return founded.m_getPokemonCount();
-}
-
-Region const* Region::findRegion(const int givenMin[3], const int givenMax[3]) const{
     bool result = true;
     for (int i = 0; i < 3; i++) {
-        result = result && (givenMin[i] == givenMin[i]) && (givenMin[i] == givenMax[i]);
+        result = result && (m_minBorder[i] == givenMin[i]) && (m_maxBorder[i] == givenMax[i]);
     }
 
     if(result){
-        return this;
+        return m_getPokemonCount();
     }
 
     if(placePosition(givenMin[0], givenMin[1], givenMin[2]) == 'l') {
         if(m_leftPart)
-            return m_leftPart->findRegion(givenMin, givenMax);
-        else
-            return NULL;
+            return m_leftPart->getPokemonCount(givenMin, givenMax);
+        else{
+            return 0;
+        }
+
     } else {
         if(m_rightPart)
-            return m_rightPart->findRegion(givenMin, givenMax);
-        else
-            return NULL;
+            return m_rightPart->getPokemonCount(givenMin, givenMax);
+        else{
+            return 0;
+        }
     }
 }
 
@@ -320,25 +335,94 @@ Region Region::crop(const int givenMin [3], const int givenMax [3]) const {
         result = result && (m_minBorder[i] == givenMin[i]) && (m_maxBorder[i] == givenMax[i]);
     }
 
-    if(result)
+    if(result){
         return *this;
+    }
 
     if(placePosition(givenMin[0], givenMin[1], givenMin[2]) == 'l') {
         if(m_leftPart)
             return m_leftPart->crop(givenMin, givenMax);
-        else{
-            Region *resultVol = new Region(m_minBorder, m_maxBorder);
-            return *resultVol;
-        }
 
     } else {
         if(m_rightPart)
             return m_rightPart->crop(givenMin, givenMax);
-        else{
-            Region *resultVol = new Region(m_minBorder, m_maxBorder);
-            return *resultVol;
-        }
+
     }
+}
+
+char Region::findPatchPos (const int givenMin[3], const int givenMax[3]) const {
+    int totalArr[3];
+    int _leftMaxX[3];
+    int _rightMinX[3];
+    int _leftMaxY[3];
+    int _rightMinY[3];
+    int _leftMaxZ[3];
+    int _rightMinZ[3];
+    bool checkX = true;
+    bool checkY = true;
+    bool checkZ = true;
+
+    for(int i = 0; i < 3; i++)
+        totalArr[i] = (m_minBorder[i] + m_maxBorder[i]);
+
+    int _midX = totalArr[0] / 2;
+    int _passNextX = (totalArr[0] > 0) ? 1 : -1;
+    int _secondStartX = _midX + _passNextX;
+
+    int _midY = totalArr[1] / 2;
+    int _passNextY = (totalArr[1] > 0) ? 1 : -1;
+    int _secondStartY = _midY + _passNextY;
+
+    int _midZ = totalArr[2] / 2;
+    int _passNextZ = (totalArr[2] > 0) ? 1 : -1;
+    int _secondStartZ = _midZ + _passNextZ;
+
+    _leftMaxX[0] = _midX;
+    _leftMaxX[1] = m_maxBorder[1];
+    _leftMaxX[2] = m_maxBorder[2];
+
+    _rightMinX[0] = _secondStartX;
+    _rightMinX[1] = m_minBorder[1];
+    _rightMinX[2] = m_minBorder[2];
+
+    _leftMaxY[1] = _midY;
+    _leftMaxY[0] = m_maxBorder[0];
+    _leftMaxY[2] = m_maxBorder[2];
+
+    _rightMinY[1] = _secondStartY;
+    _rightMinY[0] = m_minBorder[0];
+    _rightMinY[2] = m_minBorder[2];
+
+    _leftMaxZ[2] = _midZ;
+    _leftMaxZ[0] = m_maxBorder[0];
+    _leftMaxZ[1] = m_maxBorder[1];
+
+    _rightMinZ[2] = _secondStartZ;
+    _rightMinZ[0] = m_minBorder[0];
+    _rightMinZ[1] = m_minBorder[1];
+
+
+    for(int i = 0; i < 3; i++){
+        checkX = checkX && (m_minBorder[i] == givenMin[i]) && (_leftMaxX[i] == givenMax[i]);
+        checkY = checkY && (m_minBorder[i] == givenMin[i]) && (_leftMaxY[i] == givenMax[i]);
+        checkZ = checkZ && (m_minBorder[i] == givenMin[i]) && (_leftMaxZ[i] == givenMax[i]);
+    }
+
+    if(checkX || checkY || checkZ)
+        return 'l';
+
+    checkX = checkY = checkZ = true;
+
+    for(int i = 0; i < 3; i++){
+        checkX = checkX && (_rightMinX[i] == givenMin[i]) && (m_maxBorder[i] == givenMax[i]);
+        checkY = checkY && (_rightMinY[i] == givenMin[i]) && (m_maxBorder[i] == givenMax[i]);
+        checkZ = checkZ && (_rightMinZ[i] == givenMin[i]) && (m_maxBorder[i] == givenMax[i]);
+    }
+
+    if(checkX || checkY || checkZ)
+        return 'r';
+
+    return 'n';
 }
 
 void Region::patch(Region other) {
@@ -356,17 +440,25 @@ void Region::patch(Region other) {
     int otherMinZ = other.m_minBorder[2];
 
     char pos = placePosition(otherMinX, otherMinY, otherMinZ);
+    char directPut = findPatchPos(other.m_minBorder, other.m_maxBorder);
 
-    if(pos == 'l') {
-        if (!m_leftPart)
-            m_leftPart = new Region(m_minBorder, m_maxBorder);
+    if(directPut == 'l'){
+        m_leftPart->copyHelper(other);
+    }
+    else if(directPut == 'r'){
+        m_rightPart->copyHelper(other);
+    } else{
+        if(pos == 'l') {
+            if (!m_leftPart)
+                m_leftPart = new Region(m_minBorder, leftMax, m_divDimension, this);
 
-        m_leftPart->patch(other);
-    } else {
-        if (!m_rightPart)
-            m_rightPart = new Region(m_minBorder, m_maxBorder);
+            m_leftPart->patch(other);
+        } else {
+            if (!m_rightPart)
+                m_rightPart = new Region(rightMin, m_maxBorder, m_divDimension, this);
 
-        m_rightPart->patch(other);
+            m_rightPart->patch(other);
+        }
     }
 }
 

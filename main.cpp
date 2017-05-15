@@ -80,49 +80,52 @@ int main(int argc, char* argv[]) {
 	jupiter.placePokemon(Pokemon("Gastly", "unknown", -1), 7, 1, 2); // "unknown" type of pokemons will not be put into challenge
 
 	cout << mars.getPokemonCount(cornerW, cornerZ) << "\n";		 // 0
-/*
+
 
 	mars.patch(jupiter);
 	cout << mars.getPokemonCount(cornerW, cornerZ) << "\n";		 // 2
-	//Trainer Class Tests
+
+
+    //Trainer Class Tests
 	ostream& output = cout;
 
 	world.placePokemon(Pokemon("Lapras", "water", 11), 2, 1, 3);
 	Pokemon* pokemonK = new Pokemon("Krabby", "water", 2);
-	
+
 	int corner3[3] = {2, 1, 2};
 	int corner4[3] = {6, 3, 3};
 	Trainer trainer1("Ash", pokemon1, corner3, corner4);
-	trainer1.catchPokemon(*pokemonK);
-	trainer1.scanRegion(world);
-	showPokemons(output, trainer1); 		// Pikachu, Krabby, Lapras, Raichu, Butterfree, Bulbasaur, Vileplume, 
-							// Wartortle, Pidgey, Electrode, Metapod, Gloom, Pidgeot
+    trainer1.catchPokemon(*pokemonK);
 
-	cout << world.getPokemonCount(corner1, corner2) << "\n";	// 19
-	Pokemon pokemonM("Magmar", "fire", -1);
-	world.placePokemon(pokemonM, 4, 3, 3);
-	
-	int corner5[3] = {4, 3, 0};
-	int corner6[3] = {7, 3, 3};
-	Trainer trainer2("Gary", pokemon2, corner5, corner6);
-	Pokemon* pokemonJ = new Pokemon("Jigglypuff", "grass", 9);
-	trainer2.catchPokemon(*pokemonJ);
-	trainer2.scanRegion(world);
-	showPokemons(output, trainer2);			// Raticate, Jigglypuff, Ninetales, Squirtle, Magmar
+    trainer1.scanRegion(world);
 
-	cout << ((*pokemonK)&(*pokemonJ)).getName() << "\n";	// Krabby & Jigglypuff => Jigglypuff wins
-	cout << ((*pokemonK)&pokemonM).getName() << "\n";	// Krabby & Magmar => Krabby wins
-	cout << ((*pokemonJ)&(*pokemonK)).getName() << "\n";	// Jigglypuff & Krabby => Jigglypuff wins
+    showPokemons(output, trainer1); 		// Pikachu, Krabby, Lapras, Raichu, Butterfree, Bulbasaur, Vileplume,
+                            // Wartortle, Pidgey, Electrode, Metapod, Gloom, Pidgeot
 
-	Pokemon pokemonKK("Kingler", "water", -1);
-	cout << ((*pokemonK) >> pokemonKK) << "\n";	// Try to evolve Krabby into Kingler => evolved
+    cout << world.getPokemonCount(corner1, corner2) << "\n";	// 19
+    Pokemon pokemonM("Magmar", "fire", -1);
+    world.placePokemon(pokemonM, 4, 3, 3);
 
-	showPokemons(output, trainer1); 		// Pikachu, Kingler, Lapras, Raichu, Butterfree, Bulbasaur, Vileplume, 
-							// Wartortle, Pidgey, Electrode, Metapod, Gloom, Pidgeot
+    int corner5[3] = {4, 3, 0};
+    int corner6[3] = {7, 3, 3};
+    Trainer trainer2("Gary", pokemon2, corner5, corner6);
+    Pokemon* pokemonJ = new Pokemon("Jigglypuff", "grass", 9);
+    trainer2.catchPokemon(*pokemonJ);
+    trainer2.scanRegion(world);
+    showPokemons(output, trainer2);			// Raticate, Jigglypuff, Ninetales, Squirtle, Magmar
 
-	cout << world.getPokemonCount(corner1, corner2) << "\n";	// 17
+    cout << ((*pokemonK)&(*pokemonJ)).getName() << "\n";	// Krabby & Jigglypuff => Jigglypuff wins
+    cout << ((*pokemonK)&pokemonM).getName() << "\n";	// Krabby & Magmar => Krabby wins
+    cout << ((*pokemonJ)&(*pokemonK)).getName() << "\n";	// Jigglypuff & Krabby => Jigglypuff wins
 
-	*/
+
+    Pokemon pokemonKK("Kingler", "water", -1);
+    cout << ((*pokemonK) >> pokemonKK) << "\n";	// Try to evolve Krabby into Kingler => evolved
+
+    showPokemons(output, trainer1); 		// Pikachu, Kingler, Lapras, Raichu, Butterfree, Bulbasaur, Vileplume,
+                            // Wartortle, Pidgey, Electrode, Metapod, Gloom, Pidgeot
+    cout << world.getPokemonCount(corner1, corner2) << "\n";	// 17
+
 	return 0;
 }
 
